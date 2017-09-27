@@ -9,13 +9,24 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import javax.servlet.http.HttpServletRequest;
 
 @ControllerAdvice //applies to the whole app, not to specific controller. Is not only for exceptions
+//@ControllerAdvice(assignableTypes = MyController.class) //if we want it to apply only to MyController class
+//@ControllerAdvice(basePackages = "de.be.aff.service") //if we want it to apply only to classes from de.be.aff.service
 public class MyExceptionHandler {
 
     @ExceptionHandler(IllegalArgumentException.class) //which exceptions to intercept
     @ResponseStatus(HttpStatus.BAD_REQUEST) //http status to return
     @ResponseBody
     public MyErrorMessage badRequest(HttpServletRequest req, IllegalArgumentException ex) {
-        return new MyErrorMessage(req.getRequestURL().toString(),//getting used url
-                "Intercepted exception: " + ex.getMessage());
+        return new ErrorMessage(req.getRequestURL().toString(),
+                ex.getLocalizedMessage()!=null ? ex.getLocalizedMessage() :ex.getMessage());
+    }   
+
+    //Exception is more general so it should be after more specific exceptions
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    @ResponseBody
+    public ErrorMessage generalError(HttpServletRequest req, IllegalArgumentException ex) {
+        return new ErrorMessage(req.getRequestURL().toString(),
+                ex.getLocalizedMessage()!=null ? ex.getLocalizedMessage() :ex.getMessage());
     }
 }
