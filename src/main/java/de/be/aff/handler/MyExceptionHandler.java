@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import javax.servlet.http.HttpServletRequest;
+import org.springframework.web.client.HttpStatusCodeException;
 
 @ControllerAdvice //applies to the whole app, not to specific controller. Is not only for exceptions
 //@ControllerAdvice(assignableTypes = MyController.class) //if we want it to apply only to MyController class
