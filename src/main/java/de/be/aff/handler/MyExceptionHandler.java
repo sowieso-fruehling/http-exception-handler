@@ -29,4 +29,12 @@ public class MyExceptionHandler {
         return new ErrorMessage(req.getRequestURL().toString(),
                 ex.getLocalizedMessage()!=null ? ex.getLocalizedMessage() :ex.getMessage());
     }
+    
+    @ExceptionHandler(HttpStatusCodeException.class)
+    @ResponseBody
+    public ErrorMessage httpError(HttpStatusCodeException ex, HttpServletRequest request, HttpServletResponse response) {
+        response.setStatus(ex.getStatusCode().value());
+        return new ErrorMessage(request.getRequestURL().toString(),
+                ex.getLocalizedMessage() != null ? ex.getLocalizedMessage() : ex.getMessage());
+    }
 }
